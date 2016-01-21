@@ -35,7 +35,7 @@ public class MergeAttachDetach : MonoBehaviour
     private GameObject[] nearbyLimbsofType;
     public bool hasTorso, hasArm, hasSecondArm, hasLeg, hasSecondLeg;
     private Player player;
-    private float minimumDistance = 3.5f;
+    private float minimumDistance = 2.5f;
     private Vector3 pos;
 	bool armt;
 	bool legt;
@@ -70,7 +70,7 @@ public class MergeAttachDetach : MonoBehaviour
         {
             detach();
         }
-		Debug.Log (objectTag);
+		//Debug.Log (objectTag);
     }
 
     /*
@@ -233,30 +233,32 @@ public class MergeAttachDetach : MonoBehaviour
 
             if (Vector3.Distance(transform.position, whichList[i].transform.position) <= minimumDistance)
             {
-				if (whichList[i].tag == "torso" && !hasTorso)
+				if (whichList[i].tag == "torso" && !hasTorso && (whichList[i].gameObject.activeSelf == true))
 				{
 					torso = whichList[i].gameObject;
 					objectTag = "torso";
 					return true;
 				}
-				else if (whichList[i].tag == "arm" && !hasArm && !hasSecondArm && hasTorso)
+				else if (whichList[i].tag == "arm" && !hasArm && !hasSecondArm && hasTorso && (whichList[i].gameObject.activeSelf == true))
                 {
+					//whichList[i].gameObject.SetActive(false);
                     arm = whichList[i].gameObject;
 					objectTag = "arm";
                     return true;
                 }
-				else if(whichList[i].tag == "arm" && hasArm && !hasSecondArm && hasTorso){
+				else if(whichList[i].tag == "arm" && hasArm && !hasSecondArm && hasTorso && (whichList[i].gameObject.activeSelf == true)){
 					twoArms = whichList[i].gameObject;
 					objectTag = "arm";
+
 					return true;
 				}
-				else if (whichList[i].tag == "leg" && !hasLeg && !hasSecondLeg && hasTorso)
+				else if (whichList[i].tag == "leg" && !hasLeg && !hasSecondLeg && hasTorso && (whichList[i].gameObject.activeSelf == true))
                 {
                     leg = whichList[i].gameObject;
 					objectTag = "leg";
                     return true;
                 }
-				else if(whichList[i].tag == "leg" && hasLeg && !hasSecondLeg && hasTorso){
+				else if(whichList[i].tag == "leg" && hasLeg && !hasSecondLeg && hasTorso && (whichList[i].gameObject.activeSelf == true)){
 					twoLegs = whichList[i].gameObject;
 					objectTag = "leg";
 					return true;
@@ -304,8 +306,6 @@ public class MergeAttachDetach : MonoBehaviour
         {
             hasTorso = true;
             assignState();
-            Debug.Log("testing in here");
-			//torso.transform.position = arm.transform.position;
             torso.SetActive(false);
 
         }
@@ -314,11 +314,14 @@ public class MergeAttachDetach : MonoBehaviour
 
             if (!hasArm)
             {
+				arm.SetActive (false);
+				Debug.Log (arm + "1");
                 hasArm = true;
-				arm.SetActive(false);
+
             }
             else if (hasArm && !hasSecondArm)
             {
+				Debug.Log (twoArms + "2" );
                 hasSecondArm = true;
 				twoArms.SetActive(false);
             }
