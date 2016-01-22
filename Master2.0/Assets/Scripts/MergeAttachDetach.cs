@@ -40,6 +40,7 @@ public class MergeAttachDetach : MonoBehaviour
 	bool armt;
 	bool legt;
 	bool torsot;
+
     // Use this for initialization
     void Start()
     {
@@ -361,21 +362,21 @@ public class MergeAttachDetach : MonoBehaviour
         {
 			torso.SetActive(true); 
             checkForDifferentLimbs();
-            instantiateBodyParts(torso);
+            instantiateBodyParts(torso, 0.0f);
 			hasTorso = false;
             assignState();
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2) && hasArm && !hasSecondArm)
         {
             arm.SetActive(true);
-            instantiateBodyParts(arm);
+            instantiateBodyParts(arm, 2.0f);
             hasArm = false;
             assignState();
         }
         else if (Input.GetKey(KeyCode.Alpha2) && hasArm && hasSecondArm)
         {
             twoArms.SetActive(true);
-			instantiateBodyParts(twoArms);
+			instantiateBodyParts(twoArms, 1.0f);
 			hasSecondArm = false;
             assignState();
         }
@@ -383,15 +384,15 @@ public class MergeAttachDetach : MonoBehaviour
         {
             leg.SetActive(true);
             hasLeg = false;
-            instantiateBodyParts(leg);
+            instantiateBodyParts(leg, -2.0f);
             assignState();
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3) && hasSecondLeg)
         {
             twoLegs.SetActive(true);
             hasSecondLeg = false;
-            instantiateBodyParts(leg);
-			instantiateBodyParts(twoLegs);
+            //instantiateBodyParts(leg, -1.0f);
+			instantiateBodyParts(twoLegs, -1.0f);
             assignState();
         }
 
@@ -411,26 +412,26 @@ public class MergeAttachDetach : MonoBehaviour
         if (hasArm && !hasSecondArm)
         {
             arm.SetActive(true);
-            instantiateBodyParts(arm);
+            instantiateBodyParts(arm, 2.0f);
         }
         else if (hasArm && hasSecondArm)
         {
             twoArms.SetActive(true);
 			arm.SetActive(true);
-            instantiateBodyParts(twoArms);
-			instantiateBodyParts(arm);
+            instantiateBodyParts(twoArms, 1.0f);
+			instantiateBodyParts(arm, 2.0f);
         }
         if (hasLeg && !hasSecondLeg)
         {
             leg.SetActive(true);
-            instantiateBodyParts(leg);
+            instantiateBodyParts(leg, -2.0f);
         }
         else if (hasLeg && hasSecondLeg)
         {
             twoLegs.SetActive(true);
 			leg.SetActive(true);
-            instantiateBodyParts(twoLegs);
-			instantiateBodyParts(leg);
+            instantiateBodyParts(twoLegs, -1.0f);
+			instantiateBodyParts(leg, -2.0f);
         }
         hasTorso = false;
         hasArm = false;
@@ -438,9 +439,12 @@ public class MergeAttachDetach : MonoBehaviour
         hasSecondArm = false;
         hasSecondLeg = false;
     }
-    public void instantiateBodyParts(GameObject limbs)
+    public void instantiateBodyParts(GameObject limbs, float dropPos)
     {
-        pos = player.transform.position;
+
+		Vector3 pos2 = player.transform.position;
+		pos2.x = pos2.x + dropPos;
+        pos = pos2;
 		limbs.transform.position = pos;
     }
 

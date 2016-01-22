@@ -21,10 +21,12 @@ public class Player : MonoBehaviour
     private Controller2D myController;
     private Animator myAnimator;
     private bool canJump;
+	private SpriteRenderer renderer;
 
     void Start()
     {
         myAnimator = GetComponent<Animator>();
+		renderer = GetComponent<SpriteRenderer> ();
         myController = GetComponent<Controller2D>();
         gravity = -(2 * jumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         jumpVelocity = Mathf.Abs(gravity * timeToJumpApex);
@@ -34,6 +36,12 @@ public class Player : MonoBehaviour
     {
         HandleMovments();
         HandleInputs();
+		if (Input.GetKeyDown("f")) {
+
+			StartCoroutine("Fade");
+			///ld return new WaitForSeconds(1.0f);
+			Application.LoadLevel ("ninja");
+		}
     }
 
     private void HandleMovments()
@@ -54,12 +62,36 @@ public class Player : MonoBehaviour
         playerVelocity.y += gravity * Time.deltaTime;
         myController.Move(playerVelocity * Time.deltaTime);
         myAnimator.SetFloat("speed", Mathf.Abs(Input.GetAxis("Horizontal")));
+
     }
 
     private void HandleInputs()
     {
 
     }
+	IEnumerator Fade() {
+		for (float f = 1f; f >= 0; f -= 0.1f) {
+			Color c = renderer.material.color;
+			c.a = f;
+			renderer.material.color = c;
+			yield return null;
+		}
+		yield return new WaitForSeconds (3.0f);
 
+
+	}
+
+	void nearObject(){
+		GameObject[] obstacles = GameObject.FindGameObjectsWithTag ("obstacle");
+
+		for (int i = 0; i < obstacles.Length; ++i) {
+			
+			if (Vector3.Distance (transform.position, obstacles [i].transform.position) <= 3.5f) {
+				Debug.Log ("testing in here");
+				StartCoroutine("Fade");
+
+			}
+		}
+	}
 
 }
