@@ -36,12 +36,8 @@ public class Player : MonoBehaviour
     {
         HandleMovments();
         HandleInputs();
-		if (Input.GetKeyDown("f")) {
-
-			StartCoroutine("Fade");
-			///ld return new WaitForSeconds(1.0f);
-			Application.LoadLevel ("ninja");
-		}
+		nearObject ();
+		onTopOfPressurePlates ();
     }
 
     private void HandleMovments()
@@ -70,13 +66,14 @@ public class Player : MonoBehaviour
 
     }
 	IEnumerator Fade() {
-		for (float f = 1f; f >= 0; f -= 0.1f) {
+		for (float f = 1f; f >= 0; f -= 0.01f) {
 			Color c = renderer.material.color;
 			c.a = f;
 			renderer.material.color = c;
 			yield return null;
 		}
-		yield return new WaitForSeconds (3.0f);
+		yield return new WaitForSeconds (1.0f);
+		Application.LoadLevel ("ninja");
 
 
 	}
@@ -86,12 +83,20 @@ public class Player : MonoBehaviour
 
 		for (int i = 0; i < obstacles.Length; ++i) {
 			
-			if (Vector3.Distance (transform.position, obstacles [i].transform.position) <= 3.5f) {
+			if (Vector3.Distance (transform.position, obstacles [i].transform.position) <= 1.5f) {
 				Debug.Log ("testing in here");
 				StartCoroutine("Fade");
+				moveSpeed = 0;
 
 			}
 		}
 	}
 
+	void onTopOfPressurePlates(){
+		
+
+
+	}
+	
 }
+
