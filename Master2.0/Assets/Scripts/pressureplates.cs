@@ -4,24 +4,17 @@ using System.Collections;
 public class pressureplates : MonoBehaviour {
 
 	public bool isdown;
-	public float distance;
-	public Collider2D col;
+	public bool moveDoor;
+	public bool movePlatform;
+	public GameObject col;
 	// Use this for initialization
 	void Start () {
 		isdown = false;
-		col = GetComponent<Collider2D> ();
-		distance = col.bounds.extents.y;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (check ()) {
-			Debug.Log ("pressure plates");
-		}
 		checking ();
-	}
-	bool check(){
-		return Physics.Raycast(transform.position, -Vector3.up, distance + 0.1f, 0);
 	}
 
 	void checking(){
@@ -36,11 +29,12 @@ public class pressureplates : MonoBehaviour {
 			if (otherCollider.transform.position.y > this.transform.position.y)
 			{
 				isUnderneath = true;
+				col = otherCollider.gameObject;
 				break;
-			}
+			} 
 		}
 		
-		// Take the appropriate action
+		// if players are on top of the pressure plates
 		if (!isUnderneath)
 		{
 			Debug.Log("HOORAY!");
@@ -48,14 +42,15 @@ public class pressureplates : MonoBehaviour {
 		}
 		else
 		{
-			Debug.Log("On top of the box");
+			if(col.name == "open door"){
+				moveDoor = true;
+			}
+			else if(col.name == "move platform"){
+				movePlatform = true;
+			}
+			//have boolean that triggers the whatever pressure plate is doing
+			Debug.Log("On top of box");
 		}
 	
 	}
-	/*void onTriggerEnter2D(Collider2D col){
-		if (col.gameObject.name == "Player") {
-			isdown = true;
-			Debug.Log ("Pressure Plates pressed");
-		}
-	}*/
 }

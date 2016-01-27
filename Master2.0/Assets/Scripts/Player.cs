@@ -36,8 +36,11 @@ public class Player : MonoBehaviour
     {
         HandleMovments();
         HandleInputs();
-		nearObject ();
-		onTopOfPressurePlates ();
+		//nearObject ();
+		if (Input.GetKeyDown (KeyCode.F)) {
+			StartCoroutine("Fade");
+		}
+		//onTopOfPressurePlates ();
     }
 
     private void HandleMovments()
@@ -78,7 +81,7 @@ public class Player : MonoBehaviour
 
 	}
 
-	void nearObject(){
+	/*void nearObject(){
 		GameObject[] obstacles = GameObject.FindGameObjectsWithTag ("obstacle");
 
 		for (int i = 0; i < obstacles.Length; ++i) {
@@ -90,13 +93,21 @@ public class Player : MonoBehaviour
 
 			}
 		}
-	}
+	}*/
 
-	void onTopOfPressurePlates(){
+	//Players trigger lever
+	void nearLever(){
+		GameObject[] levers = GameObject.FindGameObjectsWithTag ("lever");
 		
-
-
+		for (int i = 0; i < levers.Length; ++i) {
+			
+			if (Vector3.Distance (transform.position, levers [i].transform.position) <= 1.5f) {
+				//Player presses lever, and it does something. 
+				Debug.Log ("Lever pressed. Some boolean to keep track of lever");
+				//Instantiate(this.gameObject, this.transform.position, Quaternion.identity);
+			}
+		}
 	}
-	
+
 }
 
